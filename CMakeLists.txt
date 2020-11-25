@@ -104,6 +104,24 @@ set_target_properties(
     PUBLIC_HEADER "${OGG_HEADERS}"
 )
 
+if (MSVC)
+    set_target_properties(ogg PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG ../lib/$(Platform))
+    set_target_properties(ogg PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE ../lib/$(Platform))
+    set_target_properties(ogg PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ../lib/$(Platform))
+    set_target_properties(ogg PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ../lib/$(Platform))
+    set_target_properties(ogg PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_DEBUG ../lib/$(Platform))
+    set_target_properties(ogg PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ../lib/$(Platform))
+    foreach (flag_var
+      CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
+      CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO
+      CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+      CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+    if (${flag_var} MATCHES "/MD")
+      STRING(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+    endif()
+    endforeach(flag_var)
+endif()
+
 if(BUILD_FRAMEWORK)
     set_target_properties(ogg PROPERTIES
         FRAMEWORK TRUE
