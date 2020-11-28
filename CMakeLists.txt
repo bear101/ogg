@@ -120,6 +120,7 @@ if (MSVC)
       STRING(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
     endif()
     endforeach(flag_var)
+    set_property(TARGET ogg PROPERTY OUTPUT_NAME_DEBUG oggd)
 endif()
 
 if(BUILD_FRAMEWORK)
